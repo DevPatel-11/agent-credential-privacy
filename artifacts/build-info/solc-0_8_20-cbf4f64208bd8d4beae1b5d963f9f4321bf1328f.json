@@ -1,0 +1,35 @@
+{
+  "_format": "hh3-sol-build-info-1",
+  "id": "solc-0_8_20-cbf4f64208bd8d4beae1b5d963f9f4321bf1328f",
+  "solcVersion": "0.8.20",
+  "solcLongVersion": "0.8.20+commit.a1b79de6",
+  "userSourceNameMap": {
+    "contracts/PrivacyRegistry.sol": "project/contracts/PrivacyRegistry.sol"
+  },
+  "input": {
+    "language": "Solidity",
+    "settings": {
+      "evmVersion": "shanghai",
+      "outputSelection": {
+        "*": {
+          "": [
+            "ast"
+          ],
+          "*": [
+            "abi",
+            "evm.bytecode",
+            "evm.deployedBytecode",
+            "evm.methodIdentifiers",
+            "metadata"
+          ]
+        }
+      },
+      "remappings": []
+    },
+    "sources": {
+      "project/contracts/PrivacyRegistry.sol": {
+        "content": "// SPDX-License-Identifier: MIT\npragma solidity ^0.8.20;\n\ncontract PrivacyRegistry {\n    struct Commitment {\n        bytes32 commitmentHash;\n        address owner;\n        uint256 createdAt;\n        bool isActive;\n        uint256 nonce;\n    }\n\n    mapping(bytes32 => Commitment) public commitments;\n    mapping(address => bytes32[]) public userCommitments;\n\n    event CommitmentRegistered(bytes32 indexed commitmentId, address indexed owner, uint256 timestamp);\n    event CommitmentRevoked(bytes32 indexed commitmentId, address indexed owner);\n\n    function registerCommitment(bytes32 _commitmentHash) external returns (bytes32) {\n        bytes32 commitmentId = keccak256(abi.encodePacked(_commitmentHash, msg.sender, block.timestamp));\n        \n        require(commitments[commitmentId].createdAt == 0, \"Commitment already exists\");\n\n        commitments[commitmentId] = Commitment({\n            commitmentHash: _commitmentHash,\n            owner: msg.sender,\n            createdAt: block.timestamp,\n            isActive: true,\n            nonce: userCommitments[msg.sender].length\n        });\n\n        userCommitments[msg.sender].push(commitmentId);\n\n        emit CommitmentRegistered(commitmentId, msg.sender, block.timestamp);\n        return commitmentId;\n    }\n\n    function getCommitment(bytes32 _commitmentId) external view returns (\n        bytes32 commitmentHash,\n        address owner,\n        uint256 createdAt,\n        bool isActive,\n        uint256 nonce\n    ) {\n        Commitment memory commitment = commitments[_commitmentId];\n        return (\n            commitment.commitmentHash,\n            commitment.owner,\n            commitment.createdAt,\n            commitment.isActive,\n            commitment.nonce\n        );\n    }\n\n    function revokeCommitment(bytes32 _commitmentId) external {\n        require(commitments[_commitmentId].owner == msg.sender, \"Not the owner\");\n        require(commitments[_commitmentId].isActive, \"Already revoked\");\n\n        commitments[_commitmentId].isActive = false;\n\n        emit CommitmentRevoked(_commitmentId, msg.sender);\n    }\n\n    function getUserCommitments(address _user) external view returns (bytes32[] memory) {\n        return userCommitments[_user];\n    }\n}\n"
+      }
+    }
+  }
+}
