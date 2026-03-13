@@ -21,6 +21,9 @@
   },
   "homepage": "https://github.com/DevPatel-11/agent-credential-privacy#readme",
   "devDependencies": {
+    "@nomicfoundation/hardhat-chai-matchers": "^3.0.0",
+    "@nomicfoundation/hardhat-toolbox": "^7.0.0",
+    "chai": "^6.2.2",
     "hardhat": "^3.1.12"
   },
   "type": "module"
