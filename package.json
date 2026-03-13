@@ -1,0 +1,24 @@
+{
+  "name": "agent-credential-privacy",
+  "version": "1.0.0",
+  "description": "**Privacy-Preserving Agent Authentication for SYNTHESIS Hackathon**",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DevPatel-11/agent-credential-privacy.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/DevPatel-11/agent-credential-privacy/issues"
+  },
+  "homepage": "https://github.com/DevPatel-11/agent-credential-privacy#readme"
+}
